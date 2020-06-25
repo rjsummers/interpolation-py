@@ -1,6 +1,7 @@
 # To add a new cell, type '# %%'
 # To add a new markdown cell, type '# %% [markdown]'
 # %%
+# Import libraries.
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -10,20 +11,24 @@ sns.set()
 
 
 # %%
+# Generate a small dataset to interpolate.
 f0 = 0.3817
+Np = 33
 
-xp = np.arange(32)
+xp = np.arange(Np)
 yp = np.sin((2 * np.pi * f0) * xp)
 
 plt.scatter(xp, yp)
 
 
 # %%
-x = np.arange(31, step=0.01)
+# Create interpolation output variables.
+x = np.arange(Np - 1, step=0.01)
 y = np.zeros(np.shape(x))
 
 
 # %%
+# Nearest-neighbor interpolation.
 for ii in np.arange(np.size(x)):
     idx = int(round(x[ii]))
     y[ii] = yp[idx]
@@ -33,6 +38,7 @@ plt.scatter(xp, yp)
 
 
 # %%
+# Linear interpolation.
 for ii in np.arange(np.size(x)):
     dec, idx = math.modf(x[ii])
     idx = int(idx)
@@ -43,6 +49,7 @@ plt.scatter(xp, yp)
 
 
 # %%
+# Rectangular windowed sinc interpolation.
 size_parameter = 5
 
 window_size = np.zeros(np.size(y))
@@ -62,9 +69,11 @@ plt.scatter(xp, yp)
 
 
 # %%
+# Plot of window size for each sample interpolated.
 plt.plot(x, window_size)
 
 # %%
+# Hann-windowed sinc interpolation.
 size_parameter = 5
 
 for ii in np.arange(np.size(x)):
@@ -83,6 +92,7 @@ plt.scatter(xp, yp)
 
 
 # %%
+# Lanczos-windowed sinc interpolation.
 size_parameter = 5
 
 for ii in np.arange(np.size(x)):
@@ -97,6 +107,22 @@ for ii in np.arange(np.size(x)):
                    np.sinc(sinc_args / size_parameter))
 
 plt.plot(x, y)
+plt.scatter(xp, yp)
+
+
+# %%
+
+Norig = np.shape(xp)[0]
+Nint = 1024
+pad_size = Nint - Norig
+
+ys = np.fft.fft(yp)
+ys = np.insert(ys, int(np.ceil(Norig/2)), np.zeros(pad_size))
+yr = np.fft.ifft(ys) * (Nint / Norig)
+
+xr = np.arange(0, Nint) * Norig / Nint
+
+plt.plot(xr, yr)
 plt.scatter(xp, yp)
 
 
