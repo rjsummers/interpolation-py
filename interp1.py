@@ -64,6 +64,23 @@ plt.scatter(xp, yp)
 # %%
 plt.plot(x, window_size)
 
+# %%
+size_parameter = 5
+
+for ii in np.arange(np.size(x)):
+    lower_idx = int(np.ceil(x[ii] - size_parameter))
+    upper_idx = int(np.ceil(x[ii] + size_parameter))
+    if lower_idx < 0:
+        lower_idx = 0
+    if upper_idx > np.size(xp):
+        upper_idx = int(np.size(xp))
+    sinc_args = x[ii] - np.arange(start=lower_idx, stop=upper_idx)
+    y[ii] = np.sum(yp[lower_idx:upper_idx] * np.sinc(sinc_args) *
+                   (0.5 + 0.5 * np.cos(np.pi * sinc_args / size_parameter)))
+
+plt.plot(x, y)
+plt.scatter(xp, yp)
+
 
 # %%
 size_parameter = 5
