@@ -24,14 +24,19 @@ plt.scatter(xp, yp)
 # %%
 # Create interpolation output variables.
 x = np.arange(Np - 1, step=0.01)
-y = np.zeros(np.shape(x))
 
 
 # %%
 # Nearest-neighbor interpolation.
-for ii in np.arange(np.size(x)):
-    idx = int(round(x[ii]))
-    y[ii] = yp[idx]
+def interp1_nearest_neighbor(xp, yp, x):
+    y = np.zeros(np.shape(x))
+    for ii in np.arange(np.size(x)):
+        idx = int(round(x[ii]))
+        y[ii] = yp[idx]
+    return y
+
+
+y = interp1_nearest_neighbor(xp, yp, x)
 
 plt.plot(x, y)
 plt.scatter(xp, yp)
