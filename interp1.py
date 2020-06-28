@@ -44,10 +44,16 @@ plt.scatter(xp, yp)
 
 # %%
 # Linear interpolation.
-for ii in np.arange(np.size(x)):
-    dec, idx = math.modf(x[ii])
-    idx = int(idx)
-    y[ii] = yp[idx] + (yp[idx + 1] - yp[idx]) * dec
+def interp1_linear(xp, yp, x):
+    y = np.zeros(np.shape(x))
+    for ii in np.arange(np.size(x)):
+        dec, idx = math.modf(x[ii])
+        idx = int(idx)
+        y[ii] = yp[idx] + (yp[idx + 1] - yp[idx]) * dec
+    return y
+
+
+y = interp1_linear(xp, yp, x)
 
 plt.plot(x, y)
 plt.scatter(xp, yp)
