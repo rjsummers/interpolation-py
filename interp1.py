@@ -114,6 +114,7 @@ plt.title("Hann windowed sinc")
 # %%
 # Lanczos-windowed sinc interpolation.
 def interp1_wsinc_lanczos(xp, yp, x, size_parameter):
+    y = np.zeros(np.shape(x))
     for ii in np.arange(np.size(x)):
         lower_idx = int(np.ceil(x[ii] - size_parameter))
         upper_idx = int(np.ceil(x[ii] + size_parameter))
@@ -151,5 +152,21 @@ plt.plot(xr, yr)
 plt.scatter(xp, yp)
 plt.title("FFT-based interpolation")
 
+
+# %%
+# Generate a larger dataset for error calculations.
+f0 = 0.3817
+Np = 21232
+
+xp = np.arange(Np)
+yp = np.sin((2 * np.pi * f0) * xp)
+
+Nint = 4096 * 2160
+x = np.random.rand(Nint) * (21232 - 1)
+
+# %%
+
+y = interp1_wsinc_lanczos(xp, yp, x, 11)
+mse = ((y - np.sin((2 * np.pi * f0) * x))**2).mean()
 
 # %%
